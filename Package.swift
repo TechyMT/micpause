@@ -7,7 +7,7 @@ let package = Package(
     targets: [
         .executableTarget(
             name: "micpause",
-            path: "Sources/micpause"
+            path: "micpause"
         )
     ]
 )
