@@ -9,11 +9,9 @@
 
 ---
 
-```
-╔══════════════════════════════════════════════════════════════════╗
-║  ✦  FRAME 01 — THE SHOT                                          ║
-╚══════════════════════════════════════════════════════════════════╝
-```
+<p align="center">
+  <img src="assets/headers/frame-01.png" alt="Frame 01 — The Shot" width="100%" />
+</p>
 
 > shot from the hip. mic flicks on, spotify drops out. you take the call. you do the work. nobody asked, nobody clapped. that's the whole point.
 
@@ -23,11 +21,9 @@ a tiny macOS daemon that **pauses spotify the moment your microphone goes hot**.
 
 ---
 
-```
-╔══════════════════════════════════════════════════════════════════╗
-║  ✦  FRAME 02 — EXPOSURE SETTINGS                                 ║
-╚══════════════════════════════════════════════════════════════════╝
-```
+<p align="center">
+  <img src="assets/headers/frame-02.png" alt="Frame 02 — Exposure Settings" width="100%" />
+</p>
 
 | stop | value |
 |------|-------|
@@ -43,11 +39,9 @@ no mic permission needed. we read device metadata, never the audio stream. macOS
 
 ---
 
-```
-╔══════════════════════════════════════════════════════════════════╗
-║  ✦  FRAME 03 — LOADING THE FILM                                  ║
-╚══════════════════════════════════════════════════════════════════╝
-```
+<p align="center">
+  <img src="assets/headers/frame-03.png" alt="Frame 03 — Loading the Film" width="100%" />
+</p>
 
 ```bash
 git clone https://github.com/TechyMT/micpause.git "$HOME/Personal Repos/micpause"
@@ -66,11 +60,9 @@ builds, drops the binary in `~/.local/bin/micpause`, lays down a LaunchAgent in 
 
 ---
 
-```
-╔══════════════════════════════════════════════════════════════════╗
-║  ✦  FRAME 04 — THE CONTROL DIAL                                  ║
-╚══════════════════════════════════════════════════════════════════╝
-```
+<p align="center">
+  <img src="assets/headers/frame-04.png" alt="Frame 04 — The Control Dial" width="100%" />
+</p>
 
 one little knob, ten little settings:
 
@@ -88,11 +80,9 @@ micpausectl uninstall      # nuke plist + binary
 
 ---
 
-```
-╔══════════════════════════════════════════════════════════════════╗
-║  ✦  FRAME 05 — CONTACT SHEET                                     ║
-╚══════════════════════════════════════════════════════════════════╝
-```
+<p align="center">
+  <img src="assets/headers/frame-05.png" alt="Frame 05 — Contact Sheet" width="100%" />
+</p>
 
 ```
 ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐
@@ -112,11 +102,9 @@ micpausectl uninstall      # nuke plist + binary
 
 ---
 
-```
-╔══════════════════════════════════════════════════════════════════╗
-║  ✦  FRAME 06 — DEVELOPER NOTES (scribbled in the margin)         ║
-╚══════════════════════════════════════════════════════════════════╝
-```
+<p align="center">
+  <img src="assets/headers/frame-06.png" alt="Frame 06 — Developer Notes" width="100%" />
+</p>
 
 - **why CoreAudio and not `lsof` polling?** because polling is for people who like burning CPU. `kAudioDevicePropertyDeviceIsRunningSomewhere` fires a callback. zero overhead. zero lag.
 - **why only spotify?** because the brief said spotify. apple music, youtube music, chrome tabs — not in this roll. maybe roll 02.
@@ -125,11 +113,9 @@ micpausectl uninstall      # nuke plist + binary
 
 ---
 
-```
-╔══════════════════════════════════════════════════════════════════╗
-║  ✦  FRAME 07 — DARKROOM (verifying the print)                    ║
-╚══════════════════════════════════════════════════════════════════╝
-```
+<p align="center">
+  <img src="assets/headers/frame-07.png" alt="Frame 07 — Darkroom" width="100%" />
+</p>
 
 1. open spotify · hit play
 2. open photo booth (or any mic-using app) ➜ spotify pauses inside ~200ms
@@ -141,11 +127,9 @@ if any of these don't fire, check `micpausectl logs`.
 
 ---
 
-```
-╔══════════════════════════════════════════════════════════════════╗
-║  ✦  FRAME 08 — END OF ROLL                                       ║
-╚══════════════════════════════════════════════════════════════════╝
-```
+<p align="center">
+  <img src="assets/headers/frame-08.png" alt="Frame 08 — End of Roll" width="100%" />
+</p>
 
 ```
                    ▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░▓▓▓
@@ -154,3 +138,5 @@ if any of these don't fire, check `micpausectl logs`.
 ```
 
 made by [@TechyMT](https://github.com/TechyMT) · MIT · no warranty, no apologies
+
+<sub>header banners regenerable via `python3 tools/generate_headers.py` · requires Pillow</sub>
