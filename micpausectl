@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-LABEL="com.mustafa.micpause"
+LABEL="io.github.techymt.micpause"
 UID_NUM="$(id -u)"
 TARGET="gui/$UID_NUM/$LABEL"
 DOMAIN="gui/$UID_NUM"
