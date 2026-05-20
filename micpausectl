@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+LABEL="com.mustafa.micpause"
+UID_NUM="$(id -u)"
+TARGET="gui/$UID_NUM/$LABEL"
+DOMAIN="gui/$UID_NUM"
+PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
+BINARY="$HOME/.local/bin/micpause"
+LOG="/tmp/micpause.log"
+ERR="/tmp/micpause.err"
+
+usage() {
+    cat <<EOF
+micpausectl — control the micpause LaunchAgent
+
+Usage: micpausectl <command>
+
+Commands:
+    status      Show whether micpause is loaded, enabled, and running
+    start       Bootstrap and start the agent (this session)
+    stop        Stop the agent (this session only; survives until reboot)
+    restart     Stop then start
+    enable      Allow the agent to start at login
+    disable     Block the agent from starting at login (and stop it now)
+    toggle      Stop if running, start if not
+    logs        Tail /tmp/micpause.log and /tmp/micpause.err
+    uninstall   Stop and remove the LaunchAgent plist and installed binary
+EOF
+}
+
+is_loaded()  { launchctl print "$TARGET" >/dev/null 2>&1; }
+is_running() { launchctl print "$TARGET" 2>/dev/null | awk '/^\s*pid =/ {print $3; exit}' | grep -qE '^[0-9]+$'; }
+
+cmd_status() {
+    if [[ ! -f "$PLIST" ]]; then
+        echo "not installed (no plist at $PLIST)"
+        echo "run ./install.sh first"
+        exit 0
+    fi
+    if is_loaded; then
+        local pid
+        pid="$(launchctl print "$TARGET" 2>/dev/null | awk '/^\s*pid =/ {print $3; exit}')"
+        if [[ -n "${pid:-}" && "$pid" =~ ^[0-9]+$ ]]; then
+            echo "loaded, running (pid $pid)"
+        else
+            echo "loaded, not running"
+        fi
+    else
+        echo "not loaded"
+    fi
+    if launchctl print-disabled "$DOMAIN" 2>/dev/null | grep -q "\"$LABEL\" => disabled"; then
+        echo "boot disabled (will NOT start at login)"
+    else
+        echo "boot enabled (will start at login)"
+    fi
+}
+
+cmd_start() {
+    [[ -f "$PLIST" ]] || { echo "no plist at $PLIST — run ./install.sh first"; exit 1; }
+    if is_loaded; then
+        echo "already loaded; kickstarting"
+        launchctl kickstart -k "$TARGET"
+    else
+        launchctl bootstrap "$DOMAIN" "$PLIST"
+        echo "started"
+    fi
+}
+
+cmd_stop() {
+    if is_loaded; then
+        launchctl bootout "$TARGET"
+        echo "stopped"
+    else
+        echo "already stopped"
+    fi
+}
+
+cmd_restart() { cmd_stop || true; cmd_start; }
+
+cmd_enable()  { launchctl enable "$TARGET"; echo "enabled at login"; }
+
+cmd_disable() {
+    cmd_stop || true
+    launchctl disable "$TARGET"
+    echo "disabled at login"
+}
+
+cmd_toggle() {
+    if is_loaded; then cmd_stop; else cmd_start; fi
+}
+
+cmd_logs() {
+    touch "$LOG" "$ERR"
+    tail -f "$LOG" "$ERR"
+}
+
+cmd_uninstall() {
+    cmd_stop || true
+    rm -f "$PLIST" "$BINARY"
+    echo "removed $PLIST and $BINARY"
+}
+
+case "${1:-}" in
+    status)    cmd_status ;;
+    start)     cmd_start ;;
+    stop)      cmd_stop ;;
+    restart)   cmd_restart ;;
+    enable)    cmd_enable ;;
+    disable)   cmd_disable ;;
+    toggle)    cmd_toggle ;;
+    logs)      cmd_logs ;;
+    uninstall) cmd_uninstall ;;
+    ""|-h|--help|help) usage ;;
+    *) echo "unknown command: $1" >&2; usage; exit 1 ;;
+esac
